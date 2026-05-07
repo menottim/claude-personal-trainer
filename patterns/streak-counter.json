@@ -1,0 +1,28 @@
+{
+  "id": "streak-counter",
+  "description": "Track consecutive-day habits or streaks. Each entry is a habit with a current streak length and last-update date.",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["habit", "currentStreak", "lastUpdate"],
+      "properties": {
+        "habit": {"type": "string"},
+        "currentStreak": {"type": "integer", "minimum": 0},
+        "lastUpdate": {"type": "string", "format": "date"},
+        "longestStreak": {"type": "integer", "minimum": 0},
+        "since": {"type": "string", "format": "date"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "exampleBlock": [
+    {"habit": "Daily achilles 0-1/10 (no pain)", "currentStreak": 14, "longestStreak": 14, "lastUpdate": "2026-05-07", "since": "2026-04-22"}
+  ],
+  "rendererHint": "streak-card",
+  "naming": {
+    "guidance": "The top-level key in data.json is conventionally 'streaks'. Individual habits are entries inside the array.",
+    "examples": ["streaks"]
+  }
+}

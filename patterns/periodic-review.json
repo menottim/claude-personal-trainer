@@ -1,0 +1,27 @@
+{
+  "id": "periodic-review",
+  "description": "Capture periodic retros (weekly, monthly, quarterly, science reviews). Each entry is a structured reflection with findings + changes-made.",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["date", "period", "findings"],
+      "properties": {
+        "date": {"type": "string", "format": "date"},
+        "period": {"type": "string"},
+        "findings": {"type": "string"},
+        "changes": {"type": "string"},
+        "metricsSnapshot": {"type": "object"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "exampleBlock": [
+    {"date": "2026-05-07", "period": "Week 9 transition", "findings": "Strength progressing.", "changes": "Hold targets per Section 7."}
+  ],
+  "rendererHint": "timeline-table",
+  "naming": {
+    "guidance": "Common names: 'reviews', 'retros', 'scienceReviews'.",
+    "examples": ["reviews", "retros", "scienceReviews"]
+  }
+}

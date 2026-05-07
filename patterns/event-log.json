@@ -1,0 +1,29 @@
+{
+  "id": "event-log",
+  "description": "Track discrete events with type/intensity/duration metadata. Use for: workouts, language practice sessions, songs written, journal entries, study sessions: anything that happens at a point in time and has structure.",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["date", "type"],
+      "properties": {
+        "date": {"type": "string", "format": "date"},
+        "type": {"type": "string", "description": "Event category, domain-specific"},
+        "activity": {"type": "string"},
+        "duration": {"type": "string"},
+        "intensity": {"type": "string", "enum": ["low", "moderate", "high", "max"]},
+        "details": {"type": "object"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "exampleBlock": [
+    {"date": "2026-05-07", "type": "workout", "activity": "Lower Body", "duration": "60 min", "intensity": "high"}
+  ],
+  "rendererHint": "timeline-table",
+  "naming": {
+    "guidance": "Pick a name that describes what's being logged. Use camelCase.",
+    "examples": ["activityLog", "practiceLog", "sessionLog"]
+  }
+}

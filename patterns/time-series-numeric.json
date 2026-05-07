@@ -1,0 +1,27 @@
+{
+  "id": "time-series-numeric",
+  "description": "Track a numeric value over time with timestamps and optional notes. Use for: weight, mood scores, sleep hours, vocab counts, dollars-saved, anything quantifiable that you'll plot over time.",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["date", "value"],
+      "properties": {
+        "date": {"type": "string", "format": "date", "description": "ISO date YYYY-MM-DD"},
+        "value": {"type": "number"},
+        "unit": {"type": "string", "description": "Human-readable unit"},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "exampleBlock": [
+    {"date": "2026-05-07", "value": 220.5, "unit": "lbs", "notes": "AM weigh-in"},
+    {"date": "2026-05-08", "value": 220.0, "unit": "lbs"}
+  ],
+  "rendererHint": "progress-chart",
+  "naming": {
+    "guidance": "Pick a name that describes what's being tracked, like 'bodyLog', 'moodLog', 'vocabSizeLog', 'savingsLog', 'sleepLog'. Use camelCase. The wizard will ask you for this.",
+    "examples": ["bodyLog", "moodLog", "savingsLog"]
+  }
+}

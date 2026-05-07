@@ -1,0 +1,28 @@
+{
+  "id": "tagged-collection",
+  "description": "A tagged collection of items: recipes, song ideas, study cards, project ideas, references. Items have free-form content + tags for retrieval.",
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": {"type": "string"},
+        "title": {"type": "string"},
+        "content": {"type": "string"},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "createdDate": {"type": "string", "format": "date"},
+        "updatedDate": {"type": "string", "format": "date"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "exampleBlock": [
+    {"id": "card-001", "title": "Spanish: subjunctive after esperar que", "content": "Use subjunctive mood.", "tags": ["spanish", "grammar"], "createdDate": "2026-05-07"}
+  ],
+  "rendererHint": "kpi-tiles",
+  "naming": {
+    "guidance": "Pick a name describing the collection. Use camelCase or plural noun.",
+    "examples": ["recipes", "songIdeas", "studyCards"]
+  }
+}
