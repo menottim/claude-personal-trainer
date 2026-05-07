@@ -41,11 +41,11 @@ The bootstrap detects no `data.json` exists and starts the interview. ~30 minute
 
 ## Privacy
 
-The wizard recommends keeping your repo private if you're tracking body composition, injury status, or anything else you wouldn't want indexed by search engines. Public is supported, but the wizard walks you through a checklist first: `data.json` is world-readable in a public repo, your git commit email is published with every commit, and you can't easily go private later. GitHub Pages on a private repo requires a paid GitHub plan; without it, your dashboard is local-only (which is fine for most users — you open `index.html` from your filesystem).
+The wizard recommends keeping your repo private if you're tracking body composition, injury status, or anything else you wouldn't want indexed by search engines. Public is supported, but the wizard walks you through a checklist first: `data.json` is world-readable in a public repo, your git commit email is published with every commit, and you can't easily go private later. GitHub Pages on a private repo requires a paid GitHub plan; without it, your dashboard is local-only (which is fine for most users; you open `index.html` from your filesystem).
 
 ## Use it for non-fitness practices?
 
-The framework underneath is domain-agnostic. The patterns (time-series, event-log, streak-counter, periodic-review, tagged-collection), widgets, and citation-discipline meta-module are reusable. If you fork this for language learning, financial tracking, songwriting, or some other longitudinal practice, the wizard handles your domain — you'll just have an empty `knowledge/` folder to start, since v1 only ships fitness modules. Claude will research and synthesize new knowledge files as topics come up in your coaching, with the same evidence-discipline rules applied.
+The framework underneath is domain-agnostic. The patterns (time-series, event-log, streak-counter, periodic-review, tagged-collection), widgets, and citation-discipline meta-module are reusable. If you fork this for language learning, financial tracking, songwriting, or some other longitudinal practice, the wizard handles your domain. You'll just have an empty `knowledge/` folder to start, since v1 only ships fitness modules. Claude will research and synthesize new knowledge files as topics come up in your coaching, with the same evidence-discipline rules applied.
 
 That's a v2 path, not the v1 promise. v1 is a fitness coach.
 
