@@ -1,0 +1,79 @@
+<!-- WIDGET: progress-chart -->
+<!-- Renders: time-series-numeric pattern -->
+<!-- XSS-safe: SVG built via createElementNS; user data set via textContent only -->
+<style>
+  .progress-chart-container { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: white; }
+  .progress-chart-container h4 { margin: 0 0 0.5rem 0; }
+  .progress-chart-svg { width: 100%; height: 200px; }
+  .progress-chart-svg .line { fill: none; stroke: #2a8b2e; stroke-width: 2; }
+  .progress-chart-svg .dot { fill: #2a8b2e; }
+  .progress-chart-svg .axis { stroke: #ccc; stroke-width: 1; }
+  .progress-chart-meta { font-size: 0.8rem; color: #888; margin-top: 0.5rem; }
+</style>
+
+<div class="progress-chart-container">
+  <h4 id="progress-chart-title">Progress Chart</h4>
+  <svg class="progress-chart-svg" id="progress-chart-svg" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+  <div class="progress-chart-meta" id="progress-chart-meta"></div>
+</div>
+
+<script>
+(async () => {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const data = await fetch('./data.json').then(r => r.json());
+  let series = null, key = null;
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v) && v.length >= 2 && v[0] && v[0].date && v[0].value !== undefined) {
+      series = v; key = k; break;
+    }
+  }
+  const titleEl = document.getElementById('progress-chart-title');
+  const svgEl = document.getElementById('progress-chart-svg');
+  const metaEl = document.getElementById('progress-chart-meta');
+  if (!series) {
+    metaEl.textContent = 'No time-series-numeric data found.';
+    return;
+  }
+  titleEl.textContent = key + ' over time';
+  const sorted = series.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const values = sorted.map(e => Number(e.value));
+  const min = Math.min.apply(null, values);
+  const max = Math.max.apply(null, values);
+  const range = (max - min) || 1;
+  const W = 600, H = 200, P = 20;
+  const pts = sorted.map((e, i) => {
+    const x = P + (i / (sorted.length - 1)) * (W - 2*P);
+    const y = H - P - ((Number(e.value) - min) / range) * (H - 2*P);
+    return [x, y, e];
+  });
+  const ax1 = document.createElementNS(SVG_NS, 'line');
+  ax1.setAttribute('class', 'axis');
+  ax1.setAttribute('x1', P); ax1.setAttribute('y1', H-P);
+  ax1.setAttribute('x2', W-P); ax1.setAttribute('y2', H-P);
+  svgEl.appendChild(ax1);
+  const ax2 = document.createElementNS(SVG_NS, 'line');
+  ax2.setAttribute('class', 'axis');
+  ax2.setAttribute('x1', P); ax2.setAttribute('y1', P);
+  ax2.setAttribute('x2', P); ax2.setAttribute('y2', H-P);
+  svgEl.appendChild(ax2);
+  const pathEl = document.createElementNS(SVG_NS, 'path');
+  pathEl.setAttribute('class', 'line');
+  pathEl.setAttribute('d', pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '));
+  svgEl.appendChild(pathEl);
+  pts.forEach(p => {
+    const c = document.createElementNS(SVG_NS, 'circle');
+    c.setAttribute('class', 'dot');
+    c.setAttribute('cx', p[0].toFixed(1));
+    c.setAttribute('cy', p[1].toFixed(1));
+    c.setAttribute('r', 3);
+    const t = document.createElementNS(SVG_NS, 'title');
+    t.textContent = String(p[2].date) + ': ' + String(p[2].value) + (p[2].unit ? ' ' + p[2].unit : '');
+    c.appendChild(t);
+    svgEl.appendChild(c);
+  });
+  const last = sorted[sorted.length - 1];
+  const unit = last.unit ? String(last.unit) : '';
+  metaEl.textContent = sorted.length + ' entries · range ' + min + '-' + max + ' ' + unit + ' · latest ' + last.value + ' on ' + last.date;
+})();
+</script>

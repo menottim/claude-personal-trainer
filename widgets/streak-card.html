@@ -1,0 +1,45 @@
+<!-- WIDGET: streak-card -->
+<!-- Renders: streak-counter pattern -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent), no innerHTML on user data -->
+<style>
+  .streak-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .streak-card { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; }
+  .streak-card h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555; }
+  .streak-card .count { font-size: 2.5rem; font-weight: bold; line-height: 1; color: #2a8b2e; }
+  .streak-card .meta { font-size: 0.8rem; color: #888; margin-top: 0.5rem; }
+  .streak-card.broken .count { color: #888; }
+</style>
+
+<h3>Streaks</h3>
+<div class="streak-card-grid" id="streak-card-mount">Loading...</div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.json').then(r => r.json());
+  const streaks = Array.isArray(data.streaks) ? data.streaks : [];
+  const mount = document.getElementById('streak-card-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (streaks.length === 0) {
+    mount.textContent = 'No streaks tracked yet.';
+    return;
+  }
+  streaks.forEach(s => {
+    const cur = Number.isFinite(Number(s.currentStreak)) ? Number(s.currentStreak) : 0;
+    const longest = Number.isFinite(Number(s.longestStreak)) ? Number(s.longestStreak) : cur;
+    const card = document.createElement('div');
+    card.className = 'streak-card' + (cur === 0 ? ' broken' : '');
+    const h4 = document.createElement('h4');
+    h4.textContent = s.habit == null ? '' : String(s.habit);
+    card.appendChild(h4);
+    const countDiv = document.createElement('div');
+    countDiv.className = 'count';
+    countDiv.textContent = String(cur);
+    card.appendChild(countDiv);
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = 'days · best ' + longest + ' · last ' + (s.lastUpdate == null ? '' : String(s.lastUpdate));
+    card.appendChild(meta);
+    mount.appendChild(card);
+  });
+})();
+</script>

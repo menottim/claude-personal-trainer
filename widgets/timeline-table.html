@@ -1,0 +1,68 @@
+<!-- WIDGET: timeline-table -->
+<!-- Renders: event-log or periodic-review pattern -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent), no innerHTML on user data -->
+<style>
+  .timeline-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .timeline-table th, .timeline-table td { padding: 0.5rem; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+  .timeline-table th { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+  .timeline-table .date { white-space: nowrap; color: #555; font-family: monospace; }
+  .timeline-table .activity { font-weight: 600; }
+  .timeline-table .notes { color: #666; }
+  .timeline-empty { font-style: italic; color: #888; padding: 1rem; }
+</style>
+
+<h3 id="timeline-title">Timeline</h3>
+<div id="timeline-mount">Loading...</div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.json').then(r => r.json());
+  let log = null, key = null;
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v) && v.length > 0 && v[0] && v[0].date) { log = v; key = k; break; }
+  }
+  const mount = document.getElementById('timeline-mount');
+  const titleEl = document.getElementById('timeline-title');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (!log) {
+    const empty = document.createElement('div');
+    empty.className = 'timeline-empty';
+    empty.textContent = 'No event log found.';
+    mount.appendChild(empty);
+    return;
+  }
+  titleEl.textContent = key;
+  const sorted = log.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 30);
+  const table = document.createElement('table');
+  table.className = 'timeline-table';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  ['Date', 'Activity', 'Details'].forEach(label => {
+    const th = document.createElement('th');
+    th.textContent = label;
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  sorted.forEach(e => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td');
+    tdDate.className = 'date';
+    tdDate.textContent = e.date == null ? '' : String(e.date);
+    tr.appendChild(tdDate);
+    const tdAct = document.createElement('td');
+    tdAct.className = 'activity';
+    tdAct.textContent = String(e.activity || e.type || e.period || '—');
+    tr.appendChild(tdAct);
+    const tdNotes = document.createElement('td');
+    tdNotes.className = 'notes';
+    tdNotes.textContent = String(e.notes || e.findings || '').slice(0, 200);
+    tr.appendChild(tdNotes);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  mount.appendChild(table);
+})();
+</script>

@@ -1,0 +1,52 @@
+<!-- WIDGET: weekly-grid -->
+<!-- Renders: event-log pattern grouped by week -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent) -->
+<style>
+  .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; }
+  .weekly-grid .day { padding: 0.5rem; border: 1px solid #eee; border-radius: 4px; min-height: 80px; font-size: 0.8rem; }
+  .weekly-grid .day .label { font-weight: 600; color: #555; font-size: 0.7rem; text-transform: uppercase; }
+  .weekly-grid .day.has-event { background: #f0f8f0; border-color: #c6e2c8; }
+  .weekly-grid .day .event-list { margin-top: 0.25rem; }
+  .weekly-grid .day .event-item { font-size: 0.75rem; color: #444; }
+</style>
+
+<h3>This Week</h3>
+<div class="weekly-grid" id="weekly-grid-mount"></div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.json').then(r => r.json());
+  let log = null;
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v) && v.length > 0 && v[0] && v[0].date && (v[0].type || v[0].activity)) { log = v; break; }
+  }
+  const mount = document.getElementById('weekly-grid-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (!log) { mount.textContent = 'No event data.'; return; }
+  const today = new Date();
+  const daysFromSunday = today.getDay();
+  const sunday = new Date(today); sunday.setDate(today.getDate() - daysFromSunday);
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(sunday); d.setDate(sunday.getDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    const events = log.filter(e => e.date === iso);
+    const dayEl = document.createElement('div');
+    dayEl.className = events.length ? 'day has-event' : 'day';
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = d.toLocaleDateString(undefined, {weekday: 'short'}) + ' ' + d.getDate();
+    dayEl.appendChild(label);
+    const list = document.createElement('div');
+    list.className = 'event-list';
+    events.forEach(e => {
+      const item = document.createElement('div');
+      item.className = 'event-item';
+      item.textContent = String(e.activity || e.type || '');
+      list.appendChild(item);
+    });
+    dayEl.appendChild(list);
+    mount.appendChild(dayEl);
+  }
+})();
+</script>

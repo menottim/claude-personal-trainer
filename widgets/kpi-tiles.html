@@ -1,0 +1,51 @@
+<!-- WIDGET: kpi-tiles -->
+<!-- Renders: any data — produces simple count/latest tiles for each top-level key in data.json -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent) -->
+<style>
+  .kpi-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .kpi-tile { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: white; }
+  .kpi-tile .label { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+  .kpi-tile .value { font-size: 2rem; font-weight: bold; color: #333; }
+  .kpi-tile .unit { font-size: 0.85rem; color: #666; }
+</style>
+
+<div class="kpi-tiles" id="kpi-tiles-mount"></div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.json').then(r => r.json());
+  const mount = document.getElementById('kpi-tiles-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  const tiles = [];
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v)) {
+      if (v.length === 0) continue;
+      const last = v[v.length - 1];
+      if (last && last.value !== undefined) {
+        tiles.push({label: k + ' (latest)', value: last.value, unit: last.unit || ''});
+      } else {
+        tiles.push({label: k + ' (count)', value: v.length, unit: 'entries'});
+      }
+    }
+  }
+  if (tiles.length === 0) { mount.textContent = 'No data to summarize yet.'; return; }
+  tiles.forEach(t => {
+    const tile = document.createElement('div');
+    tile.className = 'kpi-tile';
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = String(t.label);
+    tile.appendChild(label);
+    const valueDiv = document.createElement('div');
+    valueDiv.className = 'value';
+    valueDiv.textContent = String(t.value) + ' ';
+    const unitSpan = document.createElement('span');
+    unitSpan.className = 'unit';
+    unitSpan.textContent = String(t.unit);
+    valueDiv.appendChild(unitSpan);
+    tile.appendChild(valueDiv);
+    mount.appendChild(tile);
+  });
+})();
+</script>
