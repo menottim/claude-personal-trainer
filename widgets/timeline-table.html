@@ -17,10 +17,17 @@
 <script>
 (async () => {
   const data = await fetch('./data.json').then(r => r.json());
+  // Helper: get any date-like field from an entry
+  const getDate = e => e == null ? '' : (e.date || e.createdDate || e.updatedDate || '');
+  // Helper: get any title-like field (activity for events, title for collections, period for reviews)
+  const getTitle = e => e == null ? '' : (e.activity || e.title || e.type || e.period || '—');
+  // Helper: get any details-like field
+  const getDetails = e => e == null ? '' : (e.notes || e.findings || e.content || '');
+
   let log = null, key = null;
   for (const k in data) {
     const v = data[k];
-    if (Array.isArray(v) && v.length > 0 && v[0] && v[0].date) { log = v; key = k; break; }
+    if (Array.isArray(v) && v.length > 0 && v[0] && getDate(v[0])) { log = v; key = k; break; }
   }
   const mount = document.getElementById('timeline-mount');
   const titleEl = document.getElementById('timeline-title');
@@ -33,7 +40,7 @@
     return;
   }
   titleEl.textContent = key;
-  const sorted = log.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 30);
+  const sorted = log.slice().sort((a, b) => String(getDate(b)).localeCompare(String(getDate(a)))).slice(0, 30);
   const table = document.createElement('table');
   table.className = 'timeline-table';
   const thead = document.createElement('thead');
@@ -50,15 +57,15 @@
     const tr = document.createElement('tr');
     const tdDate = document.createElement('td');
     tdDate.className = 'date';
-    tdDate.textContent = e.date == null ? '' : String(e.date);
+    tdDate.textContent = String(getDate(e));
     tr.appendChild(tdDate);
     const tdAct = document.createElement('td');
     tdAct.className = 'activity';
-    tdAct.textContent = String(e.activity || e.type || e.period || '—');
+    tdAct.textContent = String(getTitle(e));
     tr.appendChild(tdAct);
     const tdNotes = document.createElement('td');
     tdNotes.className = 'notes';
-    tdNotes.textContent = String(e.notes || e.findings || '').slice(0, 200);
+    tdNotes.textContent = String(getDetails(e)).slice(0, 200);
     tr.appendChild(tdNotes);
     tbody.appendChild(tr);
   });

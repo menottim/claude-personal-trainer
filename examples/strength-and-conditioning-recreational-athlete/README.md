@@ -6,7 +6,7 @@ This is a fully-grown `claude-personal-trainer` setup, demonstrating what a comp
 
 - `CLAUDE.md` — the personalized coach instructions. `{{PLACEHOLDER}}` tokens (e.g., `{{ATHLETE_NAME}}`) show where the wizard injects user-specific values during real setup. In this example, those tokens are left visible deliberately so a forker can see the structure.
 - `data.example.json` — schema-only example data (synthetic entries, no real history). Demonstrates the 4 patterns this athlete tracks: `bodyLog` (time-series-numeric), `activityLog` (event-log), `scienceReviews` (periodic-review), `streaks` (streak-counter).
-- `knowledge/` — 12 evidence-synthesized modules covering: achilles HSR protocol, in-season volume management, deload protocols, progressive overload, protein distribution, sleep + recovery, body composition measurement, supplements, hormones, sodium/hydration, pre-game fueling, and the always-included citation-discipline meta-module. Each cites named peer-reviewed sources with PMIDs/DOIs.
+- `knowledge/` — 10 evidence-synthesized modules covering: achilles HSR protocol, in-season volume management, deload protocols, progressive overload, protein distribution, sleep + recovery, body composition measurement, sodium/hydration, pre-game fueling, and the always-included citation-discipline meta-module. Each cites named peer-reviewed sources with PMIDs/DOIs.
 - `index.html` — the dashboard, fetching from `data.example.json`. Composed from 4 widgets (kpi-tiles, streak-card, progress-chart, timeline-table) inside the dashboard-shell site template.
 
 ## How to read this example

@@ -22,7 +22,7 @@ Act as the user's personal {{DOMAIN}} coach. {{COACHING_VOICE}}
 
 {{EVIDENCE_DISCIPLINE}}
 
-(Three possible blocks the wizard inserts here: strict / moderate / light. See `wizard/generation-rules.md` Section 4.)
+<!-- WIZARD NOTE (strip before saving): the wizard picks ONE of the three blocks below (Strict / Moderate / Light) based on state.evidence_level, replaces {{EVIDENCE_DISCIPLINE}} with that block's content, and deletes the other two blocks plus this note. Result: the user's CLAUDE.md contains exactly one ruleset block, no parenthetical commentary. -->
 
 ### Strict block (peer-review-grade)
 
@@ -50,25 +50,14 @@ Share best understanding without citation requirement. Flag uncertainty when it 
 
 {{TRACKING_CONVENTIONS}}
 
-(Per-pattern subsection. For each pattern in state.tracking_patterns, the wizard generates:
-- The pattern's name and purpose
-- The data.json key it maps to
-- Required fields per entry
-- Optional fields per entry
-- Example entry
-- When to log to it
-- Activity-name format requirements if any)
+<!-- WIZARD NOTE (strip before saving): {{TRACKING_CONVENTIONS}} expands to one subsection per pattern in state.tracking_patterns. Each subsection includes: pattern name + purpose, the data.json key, required fields, optional fields, an example entry, when to log to it, and any activity-name format rules. After expansion, this note is stripped. -->
 
 ## Workflow Rules
 
 {{WORKFLOW_RULES}}
 
-(Generated from interview state. Includes:
-- When to log (immediately after a session, in a daily wrap-up, weekly batch?)
-- When to commit (per session, daily, only on milestones?)
-- When to write a new knowledge file (when a topic comes up >once, when user asks for it, never automatically?)
-- When to do periodic reviews if periodic-review pattern is tracked
-- Any domain-specific rules: e.g., for fitness, don't update `currentLifts` manually, derive from activityLog)
+<!-- WIZARD NOTE (strip before saving): {{WORKFLOW_RULES}} expands to bullets covering: when to log, when to commit, when to write knowledge files, when to do periodic reviews, and any domain-specific rules (e.g., for fitness: don't update derived fields manually). Strip this note. -->
+
 
 ## Things NOT to Do
 
@@ -91,4 +80,5 @@ The `knowledge/` folder contains evidence-synthesized modules. {{KNOWLEDGE_GROW_
 
 {{DOMAIN_SCHEDULE_SECTION}}
 
-(Wizard adds this section if the domain has a temporal structure: e.g., fitness phases, language-learning curriculum, financial-year boundaries. For domains without one, this section is omitted.)
+<!-- WIZARD NOTE (strip before saving — and OMIT THIS ENTIRE SECTION INCLUDING THE HEADING AND HORIZONTAL RULE if state.domain has no temporal/phased structure): only fitness, curriculum-shaped learning, and financial-year-boundary domains tend to have a meaningful Schedule section. If empty, delete from the divider down. -->
+

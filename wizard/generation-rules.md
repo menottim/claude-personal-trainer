@@ -78,6 +78,8 @@ Token-to-source mapping (matches template exactly):
 
 __Conditional sections__: any section whose populated content would be empty or trivial should be omitted entirely (not left with empty headings). The self-check (Step 6) catches unfilled placeholders but cannot detect "empty section with heading."
 
+__Strip WIZARD NOTE comments before saving__: the template contains `<!-- WIZARD NOTE ... -->` blocks describing how each placeholder should be expanded. These are author intent for Claude, not user-facing content. Remove every `<!-- WIZARD NOTE ... -->` block (including any surrounding empty lines that result) before writing the personalized `CLAUDE.md` to disk. The self-check in Step 6 should also grep for `WIZARD NOTE` and fail if any survive.
+
 ## 5. Generate personalized README.md
 
 Replace the bootstrap README with one personalized to the user's domain. Sections:
@@ -94,6 +96,7 @@ Before completing:
 - Run: `python3 -m json.tool data.json`: must succeed
 - Open `index.html` in a headless verification (or just visually open in browser)
 - Grep for `{{` in the personalized `CLAUDE.md` and `README.md`: must return no matches
+- Grep for `WIZARD NOTE` in the personalized `CLAUDE.md`: must return no matches (author-intent comments must be stripped)
 - Grep for `{{` in any pulled `knowledge/` files: must return no matches (modules should not contain template placeholders)
 
 If any check fails: report to user, do not commit, ask for direction.

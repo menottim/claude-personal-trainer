@@ -11,6 +11,7 @@ Move (do not copy) the following from repo root to `.claude-personal-trainer/`:
 - `site-templates/`
 - `knowledge-bank/`
 - `examples/`
+- `docs/` (the upstream design spec + implementation plan; useful as reference but not user-facing)
 
 After move:
 - `.claude-personal-trainer/wizard/`
@@ -19,6 +20,7 @@ After move:
 - `.claude-personal-trainer/site-templates/`
 - `.claude-personal-trainer/knowledge-bank/`
 - `.claude-personal-trainer/examples/`
+- `.claude-personal-trainer/docs/`
 
 ## Save bootstrap files
 

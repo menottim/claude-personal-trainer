@@ -34,6 +34,7 @@ Before declaring setup done:
 - Do not write knowledge files until the user explicitly requests one or the personalized CLAUDE.md is in effect.
 - Do not commit during the wizard except as the single "initial setup" commit at the very end.
 - If the user wants to abort, save `.wizard-state.json` with a `status: "aborted"` flag and leave the repo otherwise untouched.
+- Warn the user: `.wizard-state.json` is excluded by `.gitignore` (so a casual `git add .` won't catch it), but the file may contain personal disclosures (injuries, mental-health context, finances). Tell the user not to force-add it (`git add -f .wizard-state.json`) if the repo will be public.
 
 ## Git identity
 

@@ -79,11 +79,22 @@ Open with: "Last thing — do you want a visual dashboard you can look at, or ar
 Then explore:
 - Site or no site?
 - Public via GitHub Pages, or local-only?
-- __Privacy default__: strongly recommend private repo for any health, financial, or personal data. If data is sensitive and they say public, ask "are you sure?" once.
 - Site shell preference: tabbed dashboard or single-page log viewer?
 - Widget priorities (which patterns deserve hero placement?)
 
-State to save: `site_enabled`, `site_visibility`, `site_shell`, `repo_privacy`.
+### Privacy gate (mandatory before finalizing site_visibility)
+
+Walk through this checklist explicitly with the user before they commit to a public repo. If they say "public" without considering these, run through them once and let them reconsider:
+
+1. __`data.json` will be world-readable in a public repo.__ The dashboard URL isn't a secret; even if you don't share the URL, anyone who finds the GitHub repo can browse to `data.json` and read everything in it.
+2. __Sensitive categories that often shouldn't be public__: mental-health logs, eating-disorder recovery, sobriety streaks, financial details (account numbers, balances), location traces (run routes near home), data about minor children, medical conditions, hormone panels, bodyweight if the user is sensitive about it.
+3. __GitHub Pages on a private repo requires a paid GitHub plan__ (Pro/Team). On the free tier, private repos cannot host Pages. So choosing "private" defaults the dashboard to local-only — which is fine for most users.
+4. __Your git commit email__ is recorded with every commit. If your `git config user.email` is set to your real email and the repo is public, every commit publishes that email. Suggest using the GitHub-supplied `<username>@users.noreply.github.com` form if they care about this. Ask the user whether they want this configured for the repo.
+5. __You can always start private and go public later__ but not the reverse without forcibly rewriting history. Default to private when uncertain.
+
+If after this walkthrough the user still chooses public, accept it and move on. Note in `state.repo_privacy` both the choice AND a brief reason ("user explicitly accepts public exposure of training data").
+
+State to save: `site_enabled`, `site_visibility`, `site_shell`, `repo_privacy`, `noreply_email_configured`.
 
 ## End of interview
 

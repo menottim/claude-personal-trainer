@@ -2,11 +2,11 @@
 
 ## Scope
 
-Practical guidance for stocking pre-packaged, shelf-stable snacks that the athlete can keep on hand (home pantry, car, gym bag, office desk) for pre-game, pre-training, and halftime fueling. Focuses on carb-forward, low-fat, low-fiber options appropriate for the 30-minute to 3-hour pre-exercise window. Not a comprehensive nutrition review - that content lives in the `protein-distribution.md` module (if applicable) and the nutrition section of `CLAUDE.md`.
+Practical guidance for stocking pre-packaged, shelf-stable snacks an athlete can keep on hand (home pantry, car, gym bag, office desk) for pre-game, pre-training, and halftime fueling. Focuses on carb-forward, low-fat, low-fiber options appropriate for the 30-minute to 3-hour pre-exercise window. Not a comprehensive nutrition review - that content lives in the `protein-distribution.md` module (if applicable) and the nutrition section of `CLAUDE.md`.
 
 ## Evidence Basis (brief)
 
-- __[Thomas et al. 2016 Academy of Nutrition / ACSM / Dietitians of Canada joint position stand](https://pubmed.ncbi.nlm.nih.gov/26891166/)__: 1-4 g/kg carb 1-4 hours pre-exercise. For the athlete at ~100 kg, that's 100-400 g carbs over that window. Most pre-game snacks target 30-60 g carbs 1-2 hours out.
+- __[Thomas et al. 2016 Academy of Nutrition / ACSM / Dietitians of Canada joint position stand](https://pubmed.ncbi.nlm.nih.gov/26891166/)__: 1-4 g/kg carb 1-4 hours pre-exercise. For an athlete at ~100 kg, that's 100-400 g carbs over that window. Most pre-game snacks target 30-60 g carbs 1-2 hours out.
 - __Low fat + low fiber pre-exercise__: fat delays gastric emptying; fiber causes GI discomfort under sport load. Target <5 g fat and <5 g fiber in the 1-2 hour window.
 - __Familiar foods only__: pre-game is not the window to experiment. Test new snacks in practice first.
 
@@ -74,7 +74,7 @@ For an athlete with a mix of evening and morning game slots, stock these three c
 ## Pre-Game Decision Tree
 
 - __0-30 min pre-game__: Clif Bloks (half pouch) or a few pretzels. Minimal volume in stomach.
-- __1-2 hours pre-game__ (target window for the athlete): Tier 1 picks. 30-40 g carbs. e.g., pretzels + half Clif Bloks, or 2 mini rice cakes + raisins, or 1 Fig Newton pack.
+- __1-2 hours pre-game__ (common evening-game target window): Tier 1 picks. 30-40 g carbs. e.g., pretzels + half Clif Bloks, or 2 mini rice cakes + raisins, or 1 Fig Newton pack.
 - __2-3 hours pre-game__: Tier 2 picks. Nature's Bakery fig bars, Honey Stinger waffle, 2 Medjool dates.
 - __3+ hours pre-game__: treat as a meal window. Tier 3 protein-containing option or just eat a proper light meal (the lunch guidance applies).
 
@@ -105,4 +105,4 @@ For any high-intensity sport day: build glycogen reserves with carb-forward meal
 
 ## Corrections Log
 
-- __2026-04-21:__ File initialized in response to the athlete asking for pre-packaged, shelf-stable pre-game snack recommendations. Product tiers calibrated against evidence-based pre-game fueling principles (Thomas 2016 ACSM position stand, Kerksick 2017 ISSN nutrient timing).
+- __2026-04-21:__ File initialized in response to a request for pre-packaged, shelf-stable pre-game snack recommendations. Product tiers calibrated against evidence-based pre-game fueling principles (Thomas 2016 ACSM position stand, Kerksick 2017 ISSN nutrient timing).

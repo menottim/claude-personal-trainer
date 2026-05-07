@@ -124,7 +124,7 @@ To re-run the setup wizard: delete `CLAUDE.md` and `data.json`, then restore the
 
 ## Knowledge Files
 
-The `knowledge/` folder contains 12 evidence-synthesized modules covering: achilles HSR protocol, in-season volume management, deload protocols, progressive overload, protein distribution, sleep + recovery, body composition measurement, supplements, hormones, sodium/hydration, pre-game fueling, and the always-included citation-discipline meta-module. As new topics come up in coaching, additional knowledge files get written here with verified peer-reviewed citations.
+The `knowledge/` folder contains 10 evidence-synthesized modules covering: achilles HSR protocol, in-season volume management, deload protocols, progressive overload, protein distribution, sleep + recovery, body composition measurement, sodium/hydration, pre-game fueling, and the always-included citation-discipline meta-module. As new topics come up in coaching, additional knowledge files get written here with verified peer-reviewed citations.
 
 ---
 

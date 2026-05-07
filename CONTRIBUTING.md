@@ -64,14 +64,15 @@ __Constraints:__
 - No framework dependencies (no React, Vue, etc.)
 - Self-contained: HTML + inline CSS + inline JS, all in one file
 - Reads `data.json` via `fetch('./data.json')` at the standard mount point
-- Always uses an `esc()` helper for HTML-escaping any user-provided strings before they touch the DOM via innerHTML — XSS prevention is a hard requirement
+- __Use `createElement` + `textContent`__ for all user-controlled strings. __Do not use `innerHTML` with user data__, even with an escape helper. XSS prevention is a hard requirement; safe-by-construction beats safe-by-discipline.
 - Under 200 LOC
 
-__Widget skeleton (XSS-safe pattern):__
+__Widget skeleton (XSS-safe DOM-construction pattern, used by all shipped widgets):__
 
 ```html
 <!-- WIDGET: <widget-id> -->
 <!-- Renders: <pattern-id> -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent), no innerHTML on user data -->
 <style>
   /* widget-scoped CSS */
 </style>
@@ -81,12 +82,26 @@ __Widget skeleton (XSS-safe pattern):__
 
 <script>
 (async () => {
-  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const data = await fetch('./data.json').then(r => r.json());
-  // ... render logic, using `esc()` on every interpolated user value ...
+  const items = Array.isArray(data.someKey) ? data.someKey : [];
+  const mount = document.getElementById('<widget-id>-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (items.length === 0) {
+    mount.textContent = 'No data yet.';
+    return;
+  }
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'widget-row';
+    // For ANY user-controlled string, use textContent (it auto-escapes):
+    el.textContent = item.userControlledString == null ? '' : String(item.userControlledString);
+    mount.appendChild(el);
+  });
 })();
 </script>
 ```
+
+For SVG widgets, use `document.createElementNS('http://www.w3.org/2000/svg', '...')` and set tooltip/label content via `textContent`. Never set `innerHTML` on an SVG element with user data.
 
 ## 4. Adding an example
 

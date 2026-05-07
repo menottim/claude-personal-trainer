@@ -24,7 +24,7 @@
   let series = null, key = null;
   for (const k in data) {
     const v = data[k];
-    if (Array.isArray(v) && v.length >= 2 && v[0] && v[0].date && v[0].value !== undefined) {
+    if (Array.isArray(v) && v.length >= 1 && v[0] && v[0].date && v[0].value !== undefined) {
       series = v; key = k; break;
     }
   }
@@ -37,6 +37,12 @@
   }
   titleEl.textContent = key + ' over time';
   const sorted = series.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  if (sorted.length === 1) {
+    const e = sorted[0];
+    const unit = e.unit ? ' ' + String(e.unit) : '';
+    metaEl.textContent = '1 entry: ' + e.value + unit + ' on ' + e.date + ' (need 2+ entries to plot a trend)';
+    return;
+  }
   const values = sorted.map(e => Number(e.value));
   const min = Math.min.apply(null, values);
   const max = Math.max.apply(null, values);
