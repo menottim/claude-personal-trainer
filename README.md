@@ -1,6 +1,6 @@
 # claude-personal-trainer
 
-A forkable [Claude Code](https://claude.com/claude-code) template that turns Claude into your personal strength-and-conditioning coach: tracks your training and body composition over months, maintains an evidence-anchored knowledge base of real research (achilles HSR, in-season volume, deload protocols, protein distribution, recovery, body comp, fueling), and gives you a static dashboard to glance at instead of scrolling through chat history.
+A forkable [Claude Code](https://claude.com/claude-code) template that turns Claude into your personal strength-and-conditioning coach: tracks your training and body composition over months, maintains an evidence-anchored knowledge base of real research (progressive overload, in-season volume, deload protocols, protein distribution, sleep and recovery, body comp, pre-game fueling), and gives you a static dashboard to glance at instead of scrolling through chat history.
 
 You fork it, run a 30-minute setup interview with Claude, and end up with a personalized coaching repo for your own profile (your sport, your injury history, your strength baseline, your goals, your voice preferences). The maintainer has been using exactly this shape on his own training repo for ~9 weeks and shipped this template by generalizing it.
 
@@ -12,15 +12,15 @@ If you've used Claude as a fitness coach, you've probably hit the limits:
 - Claude's recommendations drift over time. Without a knowledge base anchored to specific PMIDs, you re-litigate the same questions every few weeks (is creatine cycling needed? is the anabolic window 30 minutes?).
 - Claude's coaching voice resets every conversation. The CSCS-grade persona you spent 20 minutes calibrating is gone by next week.
 - Programming, deload triggers, and progression rules need to be __consistent__ to work, but consistency is exactly what stateless chat fails at.
-- A glanceable dashboard with your lifts, body comp trends, achilles pain streaks, and weekly volume against Schoenfeld 2017 minimums is genuinely useful. Nobody wants to build one from scratch.
+- A glanceable dashboard with your lifts, body comp trends, recovery streaks, and weekly volume against Schoenfeld 2017 minimums is genuinely useful. Nobody wants to build one from scratch.
 
 This repo solves all five.
 
 ## What you get out of the box
 
 - A bootstrap `CLAUDE.md` that interviews you across 5 phases (your sport + injuries + goals, your voice preferences, what you want to log, evidence-discipline level, dashboard preferences).
-- A `data.json` shaped for the things fitness people actually track: workouts, body composition, sleep, achilles or other injury pain monitoring, periodic science reviews, habit streaks.
-- A seed `knowledge/` folder with 10 evidence-synthesized modules: achilles HSR protocol (Beyer 2015), in-season volume management (Schoenfeld 2017, Coleman 2024), deload protocols (reactive not scheduled), progressive overload, protein distribution (Morton 2018), sleep and performance (Walsh 2021 IOC consensus), body composition measurement, sodium and hydration, pre-game fueling, plus a meta-module on citation discipline. Each cites real PMIDs/DOIs.
+- A `data.json` shaped for the things fitness people actually track: workouts, body composition, sleep, injury pain monitoring (if applicable), periodic science reviews, habit streaks.
+- A seed `knowledge/` folder with 10 evidence-synthesized modules covering universal fitness topics: progressive overload, in-season volume management (Schoenfeld 2017, Coleman 2024), deload protocols (reactive not scheduled), protein distribution (Morton 2018), sleep and performance (Walsh 2021 IOC consensus), body composition measurement, sodium and hydration, pre-game fueling, a meta-module on citation discipline, plus one sample injury-protocol module on achilles HSR (Beyer 2015) demonstrating how condition-specific protocols are handled. You'll generate your own injury or sport-specific modules over time as topics come up. Each module cites real PMIDs/DOIs.
 - An `index.html` dashboard with widgets for progress charts, streak cards, weekly schedule grid, KPI tiles, and a timeline table. Vanilla HTML+JS, XSS-safe by construction.
 - A worked example at `examples/strength-and-conditioning-recreational-athlete/` showing what a complete setup looks like for an in-season recreational athlete with achilles tendinopathy.
 
