@@ -1,0 +1,60 @@
+{
+  "controlledVocabulary": {
+    "strength": "Resistance training, hypertrophy, strength adaptations, periodization",
+    "tendinopathy": "Tendon injury management, loading protocols, return-to-play",
+    "recovery": "Sleep, fatigue, deloads, recovery modalities, hormones",
+    "nutrition": "Macros, meal timing, fueling for sport, body composition, hydration",
+    "body-composition": "Measurement methods, recomp protocols, lean-mass preservation",
+    "in-season-athlete": "Athletes balancing competition with training",
+    "evidence-discipline": "How to find and verify sources; meta-rules for citation"
+  },
+  "modules": {
+    "tendinopathy/achilles-hsr-protocol.md": [
+      "tendinopathy",
+      "in-season-athlete",
+      "recovery"
+    ],
+    "strength/in-season-volume.md": [
+      "strength",
+      "in-season-athlete",
+      "recovery"
+    ],
+    "nutrition/protein-distribution.md": [
+      "nutrition"
+    ],
+    "recovery/sleep-and-performance.md": [
+      "recovery",
+      "evidence-discipline"
+    ],
+    "body-composition/measurement-methods.md": [
+      "body-composition",
+      "nutrition"
+    ],
+    "nutrition/pre-game-fueling.md": [
+      "nutrition",
+      "in-season-athlete"
+    ],
+    "nutrition/sodium-hydration.md": [
+      "nutrition",
+      "in-season-athlete",
+      "recovery"
+    ],
+    "recovery/supplements.md": [
+      "recovery",
+      "nutrition"
+    ],
+    "recovery/hormones-and-recovery.md": [
+      "recovery"
+    ],
+    "strength/progressive-overload.md": [
+      "strength"
+    ],
+    "strength/deload-protocols.md": [
+      "strength",
+      "recovery"
+    ],
+    "general-evidence-discipline/how-to-cite.md": [
+      "evidence-discipline"
+    ]
+  }
+}
