@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "domain": "Strength and Conditioning — Recreational Athlete",
+    "created_date": "2026-05-07",
+    "tracker_version": "claude-personal-trainer-v1",
+    "note": "ALL DATA IN THIS FILE IS SYNTHETIC. Real entries come from running the wizard for your own athlete profile."
+  },
+  "athlete": {
+    "name": "{{ATHLETE_NAME}}",
+    "age": "{{ATHLETE_AGE}}",
+    "height": "{{ATHLETE_HEIGHT}}",
+    "weight": "{{ATHLETE_WEIGHT}}",
+    "injuries": "{{ATHLETE_INJURIES}}",
+    "sportSchedule": "{{ATHLETE_SPORTS}}",
+    "goalsPriority": ["injury-prevention", "strength-power", "sport-output"],
+    "twelveMonthTargets": {
+      "trapBarDeadlift": "385x5",
+      "backSquat": "315x5",
+      "benchPress": "225x5"
+    }
+  },
+  "bodyLog": [
+    {"date": "2026-05-01", "value": 220, "unit": "lbs", "bodyFatPct": 23, "proteinGrams": 180, "calories": 2400, "sleepHours": 8, "notes": "AM weigh-in (synthetic example)"},
+    {"date": "2026-05-04", "value": 219.5, "unit": "lbs", "bodyFatPct": 22.8, "proteinGrams": 195, "calories": 2300, "sleepHours": 7.5, "notes": "(synthetic example)"},
+    {"date": "2026-05-07", "value": 219.0, "unit": "lbs", "bodyFatPct": 22.7, "proteinGrams": 175, "calories": 2250, "sleepHours": 8, "notes": "(synthetic example)"}
+  ],
+  "activityLog": [
+    {
+      "date": "2026-05-01",
+      "type": "training",
+      "activity": "Lower Body (Wed Phase 1)",
+      "exercises": [
+        {"name": "Trap Bar Deadlift", "sets": "4x5", "weight": "225 lbs"},
+        {"name": "Back Squat", "sets": "3x5", "weight": "145 lbs"},
+        {"name": "Bulgarian Split Squat", "sets": "3x8/leg", "weight": "20 lb DBs"},
+        {"name": "Single-Leg RDL", "sets": "3x8/leg", "weight": "30 lb DBs"},
+        {"name": "Seated Calf Raise (HSR)", "sets": "3x6", "weight": "150 lbs"}
+      ],
+      "sleepHours": 8,
+      "achillesPain": 1,
+      "notes": "Synthetic example entry. Real entries will be richer with notes about RPE, deviations from plan, sleep quality, etc."
+    },
+    {
+      "date": "2026-05-03",
+      "type": "game",
+      "activity": "Basketball",
+      "duration": "40 min",
+      "intensity": "high",
+      "achillesPain": 0,
+      "sleepHours": 8,
+      "notes": "Synthetic example entry"
+    },
+    {
+      "date": "2026-05-05",
+      "type": "training",
+      "activity": "Upper Body + Core (Thu Phase 1)",
+      "exercises": [
+        {"name": "Bench Press", "sets": "4x5", "weight": "145 lbs"},
+        {"name": "Lat Pulldown", "sets": "4x6", "weight": "140 lbs"},
+        {"name": "DB Bench Press", "sets": "3x8", "weight": "55 lbs"},
+        {"name": "Chest-Supported Row", "sets": "3x8", "weight": "55 lbs"}
+      ],
+      "sleepHours": 7,
+      "notes": "Synthetic example entry"
+    },
+    {
+      "date": "2026-05-07",
+      "type": "recovery",
+      "activity": "Theragun therapy",
+      "details": "Percussion gun on quads, glutes, calves",
+      "notes": "Section 5 ranks percussion gun #3 in recovery ROI per Dupuy 2018 meta-analysis (synthetic example entry)"
+    }
+  ],
+  "scienceReviews": [
+    {
+      "date": "2026-05-04",
+      "period": "Week N — synthetic example review",
+      "findings": "This is a synthetic example. In a real setup, the science review captures multi-paragraph synthesis of recent training data against evidence-based guidelines: HSR compliance, achilles pain trends, sleep averages, body composition trajectory, volume per muscle group vs. Schoenfeld 2017 minimums, etc.",
+      "changes": "What was adjusted as a result of the review."
+    }
+  ],
+  "streaks": [
+    {"habit": "Achilles pain ≤3/10 days (Silbernagel-green)", "currentStreak": 14, "longestStreak": 21, "lastUpdate": "2026-05-07", "since": "2026-04-22"},
+    {"habit": "HSR sessions hit (target 3x/week)", "currentStreak": 5, "longestStreak": 9, "lastUpdate": "2026-05-07"}
+  ]
+}

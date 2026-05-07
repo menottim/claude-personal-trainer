@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strength &amp; Conditioning — Example</title>
+  <style>
+    :root {
+      --bg: #fafafa; --surface: #fff; --text: #222; --text-muted: #666;
+      --accent: #2a8b2e; --border: #e0e0e0;
+    }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 1.5rem 2rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+    header h1 { margin: 0; font-size: 1.5rem; }
+    header .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem; }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
+    .tabs button { background: none; border: none; padding: 0.75rem 1rem; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    section { margin-bottom: 2rem; }
+    h2, h3 { color: var(--text); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Strength &amp; Conditioning — Example</h1>
+    <div class="subtitle">In-season recreational athlete (synthetic example, no real data)</div>
+  </header>
+  <main>
+    <div class="tabs">
+      <button class="active" data-tab="today">Today</button>
+      <button data-tab="history">History</button>
+      <button data-tab="knowledge">Knowledge</button>
+    </div>
+
+    <div id="tab-today" class="tab-content active">
+      <!-- WIDGET-MOUNT: today -->
+      <section><!-- WIDGET: kpi-tiles -->
+<!-- Renders: any data — produces simple count/latest tiles for each top-level key in data.json -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent) -->
+<style>
+  .kpi-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .kpi-tile { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: white; }
+  .kpi-tile .label { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+  .kpi-tile .value { font-size: 2rem; font-weight: bold; color: #333; }
+  .kpi-tile .unit { font-size: 0.85rem; color: #666; }
+</style>
+
+<div class="kpi-tiles" id="kpi-tiles-mount"></div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.example.json').then(r => r.json());
+  const mount = document.getElementById('kpi-tiles-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  const tiles = [];
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v)) {
+      if (v.length === 0) continue;
+      const last = v[v.length - 1];
+      if (last && last.value !== undefined) {
+        tiles.push({label: k + ' (latest)', value: last.value, unit: last.unit || ''});
+      } else {
+        tiles.push({label: k + ' (count)', value: v.length, unit: 'entries'});
+      }
+    }
+  }
+  if (tiles.length === 0) { mount.textContent = 'No data to summarize yet.'; return; }
+  tiles.forEach(t => {
+    const tile = document.createElement('div');
+    tile.className = 'kpi-tile';
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = String(t.label);
+    tile.appendChild(label);
+    const valueDiv = document.createElement('div');
+    valueDiv.className = 'value';
+    valueDiv.textContent = String(t.value) + ' ';
+    const unitSpan = document.createElement('span');
+    unitSpan.className = 'unit';
+    unitSpan.textContent = String(t.unit);
+    valueDiv.appendChild(unitSpan);
+    tile.appendChild(valueDiv);
+    mount.appendChild(tile);
+  });
+})();
+</script>
+</section>
+<section><!-- WIDGET: streak-card -->
+<!-- Renders: streak-counter pattern -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent), no innerHTML on user data -->
+<style>
+  .streak-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .streak-card { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; }
+  .streak-card h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #555; }
+  .streak-card .count { font-size: 2.5rem; font-weight: bold; line-height: 1; color: #2a8b2e; }
+  .streak-card .meta { font-size: 0.8rem; color: #888; margin-top: 0.5rem; }
+  .streak-card.broken .count { color: #888; }
+</style>
+
+<h3>Streaks</h3>
+<div class="streak-card-grid" id="streak-card-mount">Loading...</div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.example.json').then(r => r.json());
+  const streaks = Array.isArray(data.streaks) ? data.streaks : [];
+  const mount = document.getElementById('streak-card-mount');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (streaks.length === 0) {
+    mount.textContent = 'No streaks tracked yet.';
+    return;
+  }
+  streaks.forEach(s => {
+    const cur = Number.isFinite(Number(s.currentStreak)) ? Number(s.currentStreak) : 0;
+    const longest = Number.isFinite(Number(s.longestStreak)) ? Number(s.longestStreak) : cur;
+    const card = document.createElement('div');
+    card.className = 'streak-card' + (cur === 0 ? ' broken' : '');
+    const h4 = document.createElement('h4');
+    h4.textContent = s.habit == null ? '' : String(s.habit);
+    card.appendChild(h4);
+    const countDiv = document.createElement('div');
+    countDiv.className = 'count';
+    countDiv.textContent = String(cur);
+    card.appendChild(countDiv);
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = 'days · best ' + longest + ' · last ' + (s.lastUpdate == null ? '' : String(s.lastUpdate));
+    card.appendChild(meta);
+    mount.appendChild(card);
+  });
+})();
+</script>
+</section>
+    </div>
+
+    <div id="tab-history" class="tab-content">
+      <!-- WIDGET-MOUNT: history -->
+      <section><!-- WIDGET: progress-chart -->
+<!-- Renders: time-series-numeric pattern -->
+<!-- XSS-safe: SVG built via createElementNS; user data set via textContent only -->
+<style>
+  .progress-chart-container { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: white; }
+  .progress-chart-container h4 { margin: 0 0 0.5rem 0; }
+  .progress-chart-svg { width: 100%; height: 200px; }
+  .progress-chart-svg .line { fill: none; stroke: #2a8b2e; stroke-width: 2; }
+  .progress-chart-svg .dot { fill: #2a8b2e; }
+  .progress-chart-svg .axis { stroke: #ccc; stroke-width: 1; }
+  .progress-chart-meta { font-size: 0.8rem; color: #888; margin-top: 0.5rem; }
+</style>
+
+<div class="progress-chart-container">
+  <h4 id="progress-chart-title">Progress Chart</h4>
+  <svg class="progress-chart-svg" id="progress-chart-svg" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+  <div class="progress-chart-meta" id="progress-chart-meta"></div>
+</div>
+
+<script>
+(async () => {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const data = await fetch('./data.example.json').then(r => r.json());
+  let series = null, key = null;
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v) && v.length >= 2 && v[0] && v[0].date && v[0].value !== undefined) {
+      series = v; key = k; break;
+    }
+  }
+  const titleEl = document.getElementById('progress-chart-title');
+  const svgEl = document.getElementById('progress-chart-svg');
+  const metaEl = document.getElementById('progress-chart-meta');
+  if (!series) {
+    metaEl.textContent = 'No time-series-numeric data found.';
+    return;
+  }
+  titleEl.textContent = key + ' over time';
+  const sorted = series.slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const values = sorted.map(e => Number(e.value));
+  const min = Math.min.apply(null, values);
+  const max = Math.max.apply(null, values);
+  const range = (max - min) || 1;
+  const W = 600, H = 200, P = 20;
+  const pts = sorted.map((e, i) => {
+    const x = P + (i / (sorted.length - 1)) * (W - 2*P);
+    const y = H - P - ((Number(e.value) - min) / range) * (H - 2*P);
+    return [x, y, e];
+  });
+  const ax1 = document.createElementNS(SVG_NS, 'line');
+  ax1.setAttribute('class', 'axis');
+  ax1.setAttribute('x1', P); ax1.setAttribute('y1', H-P);
+  ax1.setAttribute('x2', W-P); ax1.setAttribute('y2', H-P);
+  svgEl.appendChild(ax1);
+  const ax2 = document.createElementNS(SVG_NS, 'line');
+  ax2.setAttribute('class', 'axis');
+  ax2.setAttribute('x1', P); ax2.setAttribute('y1', P);
+  ax2.setAttribute('x2', P); ax2.setAttribute('y2', H-P);
+  svgEl.appendChild(ax2);
+  const pathEl = document.createElementNS(SVG_NS, 'path');
+  pathEl.setAttribute('class', 'line');
+  pathEl.setAttribute('d', pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '));
+  svgEl.appendChild(pathEl);
+  pts.forEach(p => {
+    const c = document.createElementNS(SVG_NS, 'circle');
+    c.setAttribute('class', 'dot');
+    c.setAttribute('cx', p[0].toFixed(1));
+    c.setAttribute('cy', p[1].toFixed(1));
+    c.setAttribute('r', 3);
+    const t = document.createElementNS(SVG_NS, 'title');
+    t.textContent = String(p[2].date) + ': ' + String(p[2].value) + (p[2].unit ? ' ' + p[2].unit : '');
+    c.appendChild(t);
+    svgEl.appendChild(c);
+  });
+  const last = sorted[sorted.length - 1];
+  const unit = last.unit ? String(last.unit) : '';
+  metaEl.textContent = sorted.length + ' entries · range ' + min + '-' + max + ' ' + unit + ' · latest ' + last.value + ' on ' + last.date;
+})();
+</script>
+</section>
+<section><!-- WIDGET: timeline-table -->
+<!-- Renders: event-log or periodic-review pattern -->
+<!-- XSS-safe: uses DOM construction (createElement + textContent), no innerHTML on user data -->
+<style>
+  .timeline-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .timeline-table th, .timeline-table td { padding: 0.5rem; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+  .timeline-table th { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+  .timeline-table .date { white-space: nowrap; color: #555; font-family: monospace; }
+  .timeline-table .activity { font-weight: 600; }
+  .timeline-table .notes { color: #666; }
+  .timeline-empty { font-style: italic; color: #888; padding: 1rem; }
+</style>
+
+<h3 id="timeline-title">Timeline</h3>
+<div id="timeline-mount">Loading...</div>
+
+<script>
+(async () => {
+  const data = await fetch('./data.example.json').then(r => r.json());
+  let log = null, key = null;
+  for (const k in data) {
+    const v = data[k];
+    if (Array.isArray(v) && v.length > 0 && v[0] && v[0].date) { log = v; key = k; break; }
+  }
+  const mount = document.getElementById('timeline-mount');
+  const titleEl = document.getElementById('timeline-title');
+  while (mount.firstChild) mount.removeChild(mount.firstChild);
+  if (!log) {
+    const empty = document.createElement('div');
+    empty.className = 'timeline-empty';
+    empty.textContent = 'No event log found.';
+    mount.appendChild(empty);
+    return;
+  }
+  titleEl.textContent = key;
+  const sorted = log.slice().sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 30);
+  const table = document.createElement('table');
+  table.className = 'timeline-table';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  ['Date', 'Activity', 'Details'].forEach(label => {
+    const th = document.createElement('th');
+    th.textContent = label;
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  sorted.forEach(e => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td');
+    tdDate.className = 'date';
+    tdDate.textContent = e.date == null ? '' : String(e.date);
+    tr.appendChild(tdDate);
+    const tdAct = document.createElement('td');
+    tdAct.className = 'activity';
+    tdAct.textContent = String(e.activity || e.type || e.period || '—');
+    tr.appendChild(tdAct);
+    const tdNotes = document.createElement('td');
+    tdNotes.className = 'notes';
+    tdNotes.textContent = String(e.notes || e.findings || '').slice(0, 200);
+    tr.appendChild(tdNotes);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  mount.appendChild(table);
+})();
+</script>
+</section>
+    </div>
+
+    <div id="tab-knowledge" class="tab-content">
+      <h2>Knowledge</h2>
+      <p>See the <code>knowledge/</code> folder in this repo for evidence-synthesized modules.</p>
+    </div>
+  </main>
+
+  <script>
+    document.querySelectorAll('.tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+        const target = btn.getAttribute('data-tab');
+        document.getElementById('tab-' + target).classList.add('active');
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
