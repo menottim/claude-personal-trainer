@@ -23,7 +23,7 @@ Read the user's selected patterns from `state.tracking_patterns` (Phase 3). For 
   - `streak-counter` — `streaks` (or user-named)
   - `periodic-review` — `reviews` (or user-named)
   - `tagged-collection` — user names it (e.g., `recipes`, `songIdeas`)
-- Seed each array with one example entry derived from the user's stated context (not the pattern's generic example). e.g., for a fitness user: `{"date": "<today>", "weight": 220, "unit": "lbs", "notes": "Initial entry — adjust as needed"}`
+- Seed each array with one example entry derived from the user's stated context. If a starting value isn't obvious from the interview (e.g., "what's your current vocab size?" wasn't asked), either ask the user once before generating, or use a clearly-marked placeholder like `{"date": "<today>", "value": 0, "notes": "Replace with your actual starting value"}` — do not silently invent a number.
 - Add a top-level `meta` object containing: `domain`, `goals`, `user_profile` distillation, `created_date`, `tracker_version: "claude-personal-trainer-v1"`.
 
 If patterns conflict (e.g., user picks two `time-series-numeric` for the same metric), ask a clarifying question rather than producing inconsistent JSON.
@@ -55,15 +55,28 @@ Otherwise:
 
 ## 4. Generate personalized CLAUDE.md
 
-Read `wizard/claude-md-template.md`. Populate every `{{PLACEHOLDER}}` token from the wizard state. Save the result as `CLAUDE.md` at the repo root, __overwriting the bootstrap__. Specifically:
-- `{{DOMAIN}}` from state.domain
-- `{{GOALS_PROSE}}` from state.goals (formatted as a paragraph)
-- `{{USER_PROFILE}}` from state.user_profile (formatted)
-- `{{COACHING_VOICE}}` from state.voice (rendered as guidance bullets)
-- `{{FORBIDDEN_PATTERNS}}` from state.forbidden_patterns (as a list)
-- `{{TRACKING_CONVENTIONS}}` derived from state.tracking_patterns (one section per pattern explaining how to log to it)
-- `{{EVIDENCE_DISCIPLINE}}` from state.evidence_level (rendered as the matching ruleset block: see template for the three blocks)
-- `{{WORKFLOW_RULES}}` derived from state (when to log, when to commit, when to write knowledge files, when to do periodic reviews)
+Read `wizard/claude-md-template.md`. Populate every `{{PLACEHOLDER}}` token from the wizard state. Save the result as `CLAUDE.md` at the repo root, __overwriting the bootstrap__.
+
+Token-to-source mapping (matches template exactly):
+
+| Token | Source |
+|---|---|
+| `{{USER_DOMAIN_TITLE}}` | A short H1-style title for the repo, e.g. "Spanish Reading Fluency" or "Strength and Conditioning Coaching". Derive from `state.domain` + `state.goals`. |
+| `{{DOMAIN}}` | `state.domain` (the noun phrase, e.g. "language learning") |
+| `{{USER_PROFILE_BRIEF}}` | One-sentence distillation of `state.user_profile` (e.g. "an adult intermediate Spanish learner targeting reading fluency") |
+| `{{GOALS_PROSE}}` | `state.goals` formatted as a paragraph |
+| `{{SITE_URL}}` | The dashboard URL if `state.site_enabled` is true and Pages is configured; otherwise omit the line entirely (don't leave "Live site (if applicable): {{...}}" with empty value) |
+| `{{COACHING_VOICE}}` | `state.voice` rendered as guidance bullets |
+| `{{FORBIDDEN_PATTERNS_SECTION}}` | `state.forbidden_patterns` rendered as a bulleted list |
+| `{{FORMATTING_PREFS}}` | `state.formatting_prefs` rendered as bullets (markdown style, list/prose preference, etc.) |
+| `{{EVIDENCE_DISCIPLINE}}` | One of the three ruleset blocks (Strict / Moderate / Light) — see template Section "Evidence Standards" for the canonical text of each block. Pick based on `state.evidence_level`. Delete the other two blocks. |
+| `{{TRACKING_CONVENTIONS}}` | One subsection per pattern in `state.tracking_patterns`. For each: pattern name + purpose, the data.json key, required fields, optional fields, example entry, when to log to it. |
+| `{{WORKFLOW_RULES}}` | Derived from state: when to log, when to commit, when to write knowledge files, when to do periodic reviews if applicable, any domain-specific rules. |
+| `{{ADDITIONAL_DOMAIN_DONTS}}` | Domain-specific anti-patterns from interview answers (e.g., for fitness: "Do NOT update currentLifts manually"). If none, replace with empty string and remove the surrounding bullet entirely. |
+| `{{KNOWLEDGE_GROW_PROSE}}` | A 1-2 sentence note about the seeded knowledge modules + grow-over-time policy. e.g., "12 modules pulled from knowledge-bank covering tendinopathy, in-season volume, recovery..." or "Empty for now — Claude will research and synthesize topics here as they come up in coaching." |
+| `{{DOMAIN_SCHEDULE_SECTION}}` | If the domain has a temporal/phased structure (fitness phases, language curriculum levels, financial-year boundaries), populate with a Schedule section. Otherwise __omit the section entirely__ — including the heading. Don't leave an empty placeholder or empty heading. |
+
+__Conditional sections__: any section whose populated content would be empty or trivial should be omitted entirely (not left with empty headings). The self-check (Step 6) catches unfilled placeholders but cannot detect "empty section with heading."
 
 ## 5. Generate personalized README.md
 
@@ -91,13 +104,13 @@ Apply `wizard/archive-rules.md`.
 
 ## 8. Commit
 
-Single commit using the user's git identity (ask if not configured). Suggested message:
+Single commit using the user's git identity (ask if not configured). Suggested message (replace each `{{...}}` token with the actual value before committing):
 
 ```
 Initial setup via claude-personal-trainer wizard
 
-Domain: <state.domain>
-Patterns: <state.tracking_patterns joined>
-Site: <enabled|disabled>
-Repo visibility recommended: <state.repo_privacy>
+Domain: {{state.domain}}
+Patterns: {{state.tracking_patterns joined with comma}}
+Site: {{enabled|disabled}}
+Repo visibility recommended: {{state.repo_privacy}}
 ```

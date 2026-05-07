@@ -11,7 +11,7 @@ Open with: "Let's start with what you're trying to do. In a sentence or two, wha
 Then explore:
 - What does success look like in 6 / 12 months?
 - Who are you in this context: profession, time available per week, prior experience, constraints?
-- Are there any injuries, conditions, limitations, or sensitivities that should shape advice?
+- Are there any constraints, conditions, or sensitivities that should shape advice (injuries for fitness, dietary restrictions for nutrition, learning differences for study practices, time-of-day limits, etc.)?
 - Who else is involved (coach, partner, group, just you)?
 
 Branch on domain. If they say "fitness," dig into: sport, injury history, current strength baseline, training availability. If they say "language learning," dig into: target language, baseline level (A2? B1?), study time, immersion access. If novel, ask "what does a session of practice look like?" to ground the rest.
@@ -47,7 +47,7 @@ Then explore:
 - Habits / streaks maps to __streak-counter__ pattern
 - Periodic retros maps to __periodic-review__ pattern
 - Collections (recipes, ideas, cards) maps to __tagged-collection__ pattern
-- Body / output stats: which matter, which don't?
+- Output metrics: which matter, which don't? (e.g., body comp for fitness, vocab count or words-written for language, hours-deep-work for focus, dollars saved for finance)
 - Confirm: list the patterns you'd recommend and ask for approval / additions / removals
 
 State to save: `tracking_patterns` (array of pattern IDs to compose), `pattern_field_overrides` (any user customizations).
@@ -59,7 +59,7 @@ Goal: how rigorous on citations? Set the discipline level for knowledge files.
 Open with: "How rigorous do you want me to be on sources? Some users want strict peer-review citations with PMID/DOI. Others want me to share my best understanding without forcing a citation hunt."
 
 Levels:
-- __Strict__: every claim needs a verified peer-reviewed source. No citing without abstract verification. Mirrors the existing strength-and-conditioning repo's discipline.
+- __Strict__: every claim needs a verified primary source (peer-reviewed paper for science, governing standard for code/regulation, primary data for finance, etc.). No citing without verifying the source exists and matches the claim. Same discipline as the bundled strength-and-conditioning example.
 - __Moderate__: cite when easy, label "Strong/Moderate/Emerging" evidence tier, speculate-with-flag when sources are weak.
 - __Light__: Claude shares best understanding; flagged if uncertain but no citation requirement.
 
